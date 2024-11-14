@@ -1,22 +1,16 @@
-# .taskcat.yml
 project:
-  name: nested-stack-project
+  name: cfn-validation
   regions:
     - us-east-1
-    - us-west-2
   parameters:
     KeyName: group13
     TemplateBucketName: nt548-labs
     TemplateVersion: ""
     AllowedSSHIP: 0.0.0.0/0
     InstanceType: t2.micro
+  template: ./main-cfn.yaml
 
 tests:
-  nested-stack-test:
-    template: ./templates/main-cfn.yaml
-    regions:
-      - us-east-1
+  cfn-validation-test:
     parameters:
-      KeyName: group13
-      TemplateBucketName: nt548-labs
-      TemplateVersion: ""
+      AllowedSSHIP: 18.139.24.244/32

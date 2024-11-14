@@ -1,0 +1,38 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - pip install cfn-lint taskcat
+
+  pre_build:
+    commands:
+      - aws s3 cp s3://nt548-labs/vpc-cfn.yaml ./
+      - aws s3 cp s3://nt548-labs/nat-cfn.yaml ./
+      - aws s3 cp s3://nt548-labs/rt-cfn.yaml ./
+      - aws s3 cp s3://nt548-labs/sg-cfn.yaml ./
+      - aws s3 cp s3://nt548-labs/ec2-cfn.yaml ./
+      - cfn-lint *.yaml
+
+  build:
+    commands:
+      - mkdir -p taskcat_outputs
+      - taskcat test run
+      - if [ $? -ne 0 ]; then
+          cp -r ~/.taskcat/ taskcat_outputs/;
+          echo "TaskCat test failed - logs copied to artifacts";
+        fi
+
+reports:
+  taskcat-report:
+    files:
+      - '*/'
+    base-directory: taskcat_outputs
+
+artifacts:
+  files:
+    - '*/'
+  base-directory: taskcat_outputs
+  name: taskcat-test-output
