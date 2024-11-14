@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: This template create Nested stack
+Description: This template creates Nested stack with parameterized S3 bucket location
 
 Parameters:
   AllowedSSHIP:
     Description: The IP address allowed to SSH to the public EC2 instances
     Type: String
-    Default: 0.0.0.0/0  # Change to your user IP address
+    Default: 0.0.0.0/0
 
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
@@ -21,18 +21,28 @@ Parameters:
       - t2.small
       - t2.medium
 
-Resources:
+  TemplateBucketName:
+    Description: Name of the S3 bucket containing nested stack templates
+    Type: String
+    Default: nt548-labs
+
+  TemplateVersion:
+    Description: Version or path prefix for the templates in S3
+    Type: String
+    Default: ""
+
+Resources:        
   VPCStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://nt548-labs.s3.amazonaws.com/vpc-cfn.yaml
+      TemplateURL: !Sub https://${TemplateBucketName}.s3.amazonaws.com/${TemplateVersion}vpc-cfn.yaml
       TimeoutInMinutes: 10
 
   NATStack:
     Type: AWS::CloudFormation::Stack
     DependsOn: VPCStack
     Properties:
-      TemplateURL: https://nt548-labs.s3.amazonaws.com/nat-cfn.yaml
+      TemplateURL: !Sub https://${TemplateBucketName}.s3.amazonaws.com/${TemplateVersion}nat-cfn.yaml
       TimeoutInMinutes: 10
 
   RouteTablesStack:
@@ -41,14 +51,14 @@ Resources:
       - VPCStack
       - NATStack
     Properties:
-      TemplateURL: https://nt548-labs.s3.amazonaws.com/rt-cfn.yaml
+      TemplateURL: !Sub https://${TemplateBucketName}.s3.amazonaws.com/${TemplateVersion}rt-cfn.yaml
       TimeoutInMinutes: 10
 
   SecurityGroupsStack:
     Type: AWS::CloudFormation::Stack
     DependsOn: VPCStack
     Properties:
-      TemplateURL: https://nt548-labs.s3.amazonaws.com/sg-cfn.yaml
+      TemplateURL: !Sub https://${TemplateBucketName}.s3.amazonaws.com/${TemplateVersion}sg-cfn.yaml
       TimeoutInMinutes: 10
       Parameters:
         AllowedSSHIP: !Ref AllowedSSHIP
@@ -60,7 +70,7 @@ Resources:
       - RouteTablesStack
       - SecurityGroupsStack
     Properties:
-      TemplateURL: https://nt548-labs.s3.amazonaws.com/ec2-cfn.yaml
+      TemplateURL: !Sub https://${TemplateBucketName}.s3.amazonaws.com/${TemplateVersion}ec2-cfn.yaml
       TimeoutInMinutes: 10
       Parameters:
         KeyName: !Ref KeyName

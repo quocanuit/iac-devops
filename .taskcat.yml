@@ -1,0 +1,22 @@
+# .taskcat.yml
+project:
+  name: nested-stack-project
+  regions:
+    - us-east-1
+    - us-west-2
+  parameters:
+    KeyName: group13
+    TemplateBucketName: nt548-labs
+    TemplateVersion: ""
+    AllowedSSHIP: 0.0.0.0/0
+    InstanceType: t2.micro
+
+tests:
+  nested-stack-test:
+    template: ./templates/main-cfn.yaml
+    regions:
+      - us-east-1
+    parameters:
+      KeyName: group13
+      TemplateBucketName: nt548-labs
+      TemplateVersion: ""
