@@ -1,0 +1,68 @@
+{
+    "pipeline": {
+        "name": "cfn-validation-pipeline",
+        "roleArn": "arn:aws:iam::381492301125:role/service-role/AWSCodePipelineServiceRole",
+        "artifactStore": {
+            "type": "S3",
+            "location": "nt548-labs"
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name": "Source",
+                        "actionTypeId": {
+                            "category": "Source",
+                            "owner": "AWS",
+                            "provider": "CodeCommit",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "RepositoryName": "cfn-validation-repo",
+                            "BranchName": "main",
+                            "PollForSourceChanges": "false"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceCode"
+                            }
+                        ],
+                        "region": "us-east-1"
+                    }
+                ]
+            },
+            {
+                "name": "Build",
+                "actions": [
+                    {
+                        "name": "Build",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "provider": "CodeBuild",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ProjectName": "cfn-validation-test"
+                        },
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceCode"
+                            }
+                        ],
+                        "outputArtifacts": [
+                            {
+                                "name": "BuildOutput"
+                            }
+                        ],
+                        "region": "us-east-1"
+                    }
+                ]
+            }
+        ],
+        "version": 1
+    }
+}

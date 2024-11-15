@@ -1,0 +1,52 @@
+{
+    "name": "cfn-validation-test",
+    "description": "CloudFormation validation test project",
+    "source": {
+      "type": "S3",
+      "location": "nt548-labs/source.zip",
+      "buildspec": "buildspec.yml",
+      "insecureSsl": false
+    },
+    "secondarySources": [],
+    "secondarySourceVersions": [],
+    "sourceVersion": "",
+    "artifacts": {
+      "type": "S3",
+      "location": "nt548-labs",
+      "path": "cfn-validation",
+      "namespaceType": "NONE",
+      "name": "build-outputs.zip",
+      "overrideArtifactName": false,
+      "packaging": "ZIP"
+    },
+    "secondaryArtifacts": [],
+    "cache": {
+      "type": "NO_CACHE"
+    },
+    "environment": {
+      "type": "LINUX_CONTAINER",
+      "image": "aws/codebuild/standard:5.0",
+      "computeType": "BUILD_GENERAL1_SMALL",
+      "environmentVariables": [],
+      "privilegedMode": false,
+      "imagePullCredentialsType": "CODEBUILD"
+    },
+    "serviceRole": "arn:aws:iam::381492301125:role/service-role/codebuild-cfn-validation-service-role",
+    "timeoutInMinutes": 60,
+    "queuedTimeoutInMinutes": 480,
+    "encryptionKey": "arn:aws:kms:us-east-1:381492301125:alias/aws/s3",
+    "tags": [],
+    "badgeEnabled": false,
+    "logsConfig": {
+      "cloudWatchLogs": {
+        "status": "ENABLED"
+      },
+      "s3Logs": {
+        "status": "DISABLED",
+        "encryptionDisabled": false
+      }
+    },
+    "fileSystemLocations": [],
+    "concurrentBuildLimit": 1
+  }
+  
