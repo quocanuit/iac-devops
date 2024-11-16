@@ -1,24 +1,34 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: This template create NAT Gateway
 
+Parameters:
+  EnvironmentName:
+    Description: Environment name - used to make resource names unique
+    Type: String
+    Default: prod
+
 Resources: 
   NatGatewayEIP:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName}-NAT-EIP
 
   NatGateway:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatGatewayEIP.AllocationId
-      SubnetId: !ImportValue PublicSubnetId
+      SubnetId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-PublicSubnetId
       Tags:
         - Key: Name
-          Value: NAT Gateway
+          Value: !Sub ${EnvironmentName}-NAT-Gateway
 
 Outputs:
   NatGatewayId:
     Description: The NAT Gateway ID
     Value: !Ref NatGateway
     Export:
-      Name: NatGatewayId
+      Name: !Sub ${EnvironmentName}-NatGatewayId

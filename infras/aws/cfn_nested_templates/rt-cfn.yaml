@@ -1,45 +1,57 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: This template create Route Tables
 
+Parameters:
+  EnvironmentName:
+    Description: Environment name - used to make resource names unique
+    Type: String
+    Default: prod
+
 Resources:
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !ImportValue VPCId
+      VpcId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-VPCId
       Tags:
         - Key: Name
-          Value: Public Route Table
+          Value: !Sub ${EnvironmentName}-Public-Route-Table
 
   PublicRoute:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !ImportValue InternetGatewayId
+      GatewayId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-InternetGatewayId
 
   PublicSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !ImportValue PublicSubnetId
+      SubnetId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-PublicSubnetId
       RouteTableId: !Ref PublicRouteTable
 
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !ImportValue VPCId
+      VpcId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-VPCId
       Tags:
         - Key: Name
-          Value: Private Route Table
+          Value: !Sub ${EnvironmentName}-Private-Route-Table
 
   PrivateRoute:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PrivateRouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !ImportValue NatGatewayId
+      NatGatewayId: 
+        Fn::ImportValue: !Sub ${EnvironmentName}-NatGatewayId
 
   PrivateSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !ImportValue PrivateSubnetId
+      SubnetId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-PrivateSubnetId
       RouteTableId: !Ref PrivateRouteTable

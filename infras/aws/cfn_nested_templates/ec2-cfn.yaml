@@ -12,6 +12,11 @@ Parameters:
     Type: String
     Default: t2.micro
     AllowedValues: [t2.micro, t2.small, t2.medium]
+  
+  EnvironmentName:
+    Description: Environment name - used to make resource names unique
+    Type: String
+    Default: prod
 
 Resources:
   PublicInstance:
@@ -24,8 +29,9 @@ Resources:
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
           GroupSet: 
-            - !ImportValue PublicEC2SecurityGroupId
-          SubnetId: !ImportValue PublicSubnetId
+            - Fn::ImportValue: !Sub ${EnvironmentName}-PublicEC2SecurityGroupId
+          SubnetId:
+            Fn::ImportValue: !Sub ${EnvironmentName}-PublicSubnetId
       Tags: 
         - Key: Name 
           Value: Public Instance
@@ -46,8 +52,9 @@ Resources:
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"
           GroupSet: 
-            - !ImportValue PrivateEC2SecurityGroupId
-          SubnetId: !ImportValue PrivateSubnetId
+            - Fn::ImportValue: !Sub ${EnvironmentName}-PrivateEC2SecurityGroupId
+          SubnetId:
+            Fn::ImportValue: !Sub ${EnvironmentName}-PrivateSubnetId
       Tags: 
         - Key: Name 
           Value: Private Instance
