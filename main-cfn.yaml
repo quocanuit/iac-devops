@@ -31,12 +31,19 @@ Parameters:
     Type: String
     Default: ""
 
+  EnvironmentName:
+    Description: Environment name - used to make resource names unique
+    Type: String
+    Default: prod
+
 Resources:        
   VPCStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://${TemplateBucketName}.s3.amazonaws.com/${TemplateVersion}vpc-cfn.yaml
       TimeoutInMinutes: 10
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
 
   NATStack:
     Type: AWS::CloudFormation::Stack

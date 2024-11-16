@@ -8,9 +8,11 @@ project:
     TemplateVersion: ""
     AllowedSSHIP: 0.0.0.0/0
     InstanceType: t2.micro
+    EnvironmentName: test
   template: ./main-cfn.yaml
 
 tests:
   cfn-validation-test:
     parameters:
       AllowedSSHIP: 18.139.24.244/32
+      EnvironmentName: test-${AWS::StackName}
