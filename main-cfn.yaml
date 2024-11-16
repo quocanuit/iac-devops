@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: This template creates Nested stack with parameterized S3 bucket location
+Description: This template creates Nested stack
 
 Parameters:
   AllowedSSHIP:
@@ -88,12 +88,3 @@ Resources:
         KeyName: !Ref KeyName
         InstanceType: !Ref InstanceType
         EnvironmentName: !Ref EnvironmentName
-
-Outputs:
-  PublicInstanceIP:
-    Description: Public IP address of the Public Instance
-    Value: !GetAtt EC2Stack.Outputs.PublicInstanceIP
-
-  PrivateInstancePrivateIP:
-    Description: Private IP address of the Private Instance
-    Value: !GetAtt EC2Stack.Outputs.PrivateInstancePrivateIP
