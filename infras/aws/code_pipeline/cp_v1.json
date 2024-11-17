@@ -1,68 +1,142 @@
 {
-    "pipeline": {
-        "name": "cfn-validation-pipeline",
-        "roleArn": "arn:aws:iam::381492301125:role/service-role/AWSCodePipelineServiceRole",
-        "artifactStore": {
-            "type": "S3",
-            "location": "nt548-labs"
+    "name": "Lab2Pipeline2",
+    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineRole-v5ng9EviF3dK",
+    "artifactStore": {
+        "type": "S3",
+        "location": "pipeline-prebuild-stack-codepipelineartifactsbucke-sab4jxdlvdug"
+    },
+    "stages": [
+        {
+            "name": "Source",
+            "actions": [
+                {
+                    "name": "CodeConnections",
+                    "actionTypeId": {
+                        "category": "Source",
+                        "owner": "AWS",
+                        "provider": "CodeStarSourceConnection",
+                        "version": "1"
+                    },
+                    "runOrder": 1,
+                    "configuration": {
+                        "BranchName": "master",
+                        "ConnectionArn": "arn:aws:codeconnections:us-east-1:381492301125:connection/f8a29f05-dbad-4263-b90c-7ed8f00d1115",
+                        "FullRepositoryId": "quocanuit/iac-devops"
+                    },
+                    "outputArtifacts": [
+                        {
+                            "name": "SourceOutput"
+                        }
+                    ],
+                    "inputArtifacts": [],
+                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineSourceActionRol-VVHXUaKy0gVe"
+                }
+            ]
         },
-        "stages": [
-            {
-                "name": "Source",
-                "actions": [
-                    {
-                        "name": "Source",
-                        "actionTypeId": {
-                            "category": "Source",
-                            "owner": "AWS",
-                            "provider": "CodeCommit",
-                            "version": "1"
-                        },
-                        "runOrder": 1,
-                        "configuration": {
-                            "RepositoryName": "cfn-validation-repo",
-                            "BranchName": "main",
-                            "PollForSourceChanges": "false"
-                        },
-                        "outputArtifacts": [
-                            {
-                                "name": "SourceCode"
-                            }
-                        ],
-                        "region": "us-east-1"
-                    }
-                ]
+        {
+            "name": "Test",
+            "actions": [
+                {
+                    "name": "CodeBuild",
+                    "actionTypeId": {
+                        "category": "Test",
+                        "owner": "AWS",
+                        "provider": "CodeBuild",
+                        "version": "1"
+                    },
+                    "runOrder": 1,
+                    "configuration": {
+                        "ProjectName": "pipeline"
+                    },
+                    "outputArtifacts": [],
+                    "inputArtifacts": [
+                        {
+                            "name": "SourceOutput"
+                        }
+                    ],
+                    "region": "us-east-1"
+                }
+            ]
+        },
+        {
+            "name": "Deploy",
+            "actions": [
+                {
+                    "name": "CloudFormation",
+                    "actionTypeId": {
+                        "category": "Deploy",
+                        "owner": "AWS",
+                        "provider": "CloudFormation",
+                        "version": "1"
+                    },
+                    "runOrder": 1,
+                    "configuration": {
+                        "ActionMode": "CREATE_UPDATE",
+                        "Capabilities": "CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM",
+                        "OutputFileName": "output.json",
+                        "RoleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CloudFormationRole-jEvmXCoxb9Lp",
+                        "StackName": "iac-devops-fml",
+                        "TemplatePath": "SourceOutput::main-cfn.yaml"
+                    },
+                    "outputArtifacts": [
+                        {
+                            "name": "DeployOutput"
+                        }
+                    ],
+                    "inputArtifacts": [
+                        {
+                            "name": "SourceOutput"
+                        }
+                    ],
+                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineDeployActionRol-u0YtfwooJ9WC"
+                }
+            ],
+            "onFailure": {
+                "result": "ROLLBACK"
             },
-            {
-                "name": "Build",
-                "actions": [
+            "beforeEntry": {
+                "conditions": [
                     {
-                        "name": "Build",
-                        "actionTypeId": {
-                            "category": "Build",
-                            "owner": "AWS",
-                            "provider": "CodeBuild",
-                            "version": "1"
-                        },
-                        "runOrder": 1,
-                        "configuration": {
-                            "ProjectName": "cfn-validation-test"
-                        },
-                        "inputArtifacts": [
+                        "result": "FAIL",
+                        "rules": [
                             {
-                                "name": "SourceCode"
+                                "name": "MyDeploymentWindowRule",
+                                "ruleTypeId": {
+                                    "category": "Rule",
+                                    "owner": "AWS",
+                                    "provider": "DeploymentWindow",
+                                    "version": "1"
+                                },
+                                "configuration": {
+                                    "Cron": "* * * * * ? *",
+                                    "TimeZone": "PST"
+                                },
+                                "inputArtifacts": []
                             }
-                        ],
-                        "outputArtifacts": [
-                            {
-                                "name": "BuildOutput"
-                            }
-                        ],
-                        "region": "us-east-1"
+                        ]
                     }
                 ]
             }
-        ],
-        "version": 1
-    }
+        }
+    ],
+    "version": 2,
+    "executionMode": "QUEUED",
+    "pipelineType": "V2",
+    "triggers": [
+        {
+            "providerType": "CodeStarSourceConnection",
+            "gitConfiguration": {
+                "sourceActionName": "CodeConnections",
+                "push": [
+                    {
+                        "branches": {
+                            "includes": [
+                                "master"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
 }
