@@ -24,7 +24,7 @@ Resources:
     Properties:
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
-      ImageId: ami-0aa7d40eeae50c9a9  # Amazon Linux 2 AMI in us-east-1
+      ImageId: ami-005fc0f236362e99f  # Ubuntu 22.04 in us-east-1
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
@@ -47,7 +47,7 @@ Resources:
     Properties:
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
-      ImageId: ami-0aa7d40eeae50c9a9  # Amazon Linux 2 AMI in us-east-1
+      ImageId: ami-005fc0f236362e99f  # Ubuntu 22.04 in us-east-1
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"

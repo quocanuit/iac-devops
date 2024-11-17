@@ -1,9 +1,9 @@
 {
     "name": "Lab2Pipeline2",
-    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineRole-v5ng9EviF3dK",
+    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineRole-F5VN2nKpgSTQ",
     "artifactStore": {
         "type": "S3",
-        "location": "pipeline-prebuild-stack-codepipelineartifactsbucke-sab4jxdlvdug"
+        "location": "pipeline-prebuild-stack-codepipelineartifactsbucke-hcqoty49npkw"
     },
     "stages": [
         {
@@ -29,7 +29,7 @@
                         }
                     ],
                     "inputArtifacts": [],
-                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineSourceActionRol-VVHXUaKy0gVe"
+                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineSourceActionRol-fNAuRWksas4H"
                 }
             ]
         },
@@ -74,7 +74,7 @@
                         "ActionMode": "CREATE_UPDATE",
                         "Capabilities": "CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM",
                         "OutputFileName": "output.json",
-                        "RoleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CloudFormationRole-jEvmXCoxb9Lp",
+                        "RoleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CloudFormationRole-WDsqiCdFdlYa",
                         "StackName": "iac-devops-fml",
                         "TemplatePath": "SourceOutput::main-cfn.yaml"
                     },
@@ -88,7 +88,7 @@
                             "name": "SourceOutput"
                         }
                     ],
-                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineDeployActionRol-u0YtfwooJ9WC"
+                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineDeployActionRol-cPARDIRErJur"
                 }
             ],
             "onFailure": {
