@@ -1,5 +1,5 @@
 {
-    "name": "Lab2Pipeline2",
+    "name": "Pipeline13",
     "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineRole-F5VN2nKpgSTQ",
     "artifactStore": {
         "type": "S3",
@@ -62,7 +62,7 @@
             "name": "Deploy",
             "actions": [
                 {
-                    "name": "CloudFormation",
+                    "name": "CreateChangeSet",
                     "actionTypeId": {
                         "category": "Deploy",
                         "owner": "AWS",
@@ -71,9 +71,9 @@
                     },
                     "runOrder": 1,
                     "configuration": {
-                        "ActionMode": "CREATE_UPDATE",
+                        "ActionMode": "CHANGE_SET_REPLACE",
+                        "ChangeSetName": "ResourceChangeSet",
                         "Capabilities": "CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM",
-                        "OutputFileName": "output.json",
                         "RoleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CloudFormationRole-WDsqiCdFdlYa",
                         "StackName": "iac-devops-fml",
                         "TemplatePath": "SourceOutput::main-cfn.yaml"
@@ -88,6 +88,23 @@
                             "name": "SourceOutput"
                         }
                     ],
+                    "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineDeployActionRol-cPARDIRErJur"
+                },
+                {
+                    "name": "ExecuteChangeSet",
+                    "actionTypeId": {
+                        "category": "Deploy",
+                        "owner": "AWS",
+                        "provider": "CloudFormation",
+                        "version": "1"
+                    },
+                    "runOrder": 2,
+                    "configuration": {
+                        "ActionMode": "CHANGE_SET_EXECUTE",
+                        "ChangeSetName": "ResourceChangeSet",
+                        "StackName": "iac-devops-fml"
+                    },
+                    "inputArtifacts": [],
                     "roleArn": "arn:aws:iam::381492301125:role/Pipeline-prebuild-stack-CodePipelineDeployActionRol-cPARDIRErJur"
                 }
             ],
@@ -109,7 +126,7 @@
                                 },
                                 "configuration": {
                                     "Cron": "* * * * * ? *",
-                                    "TimeZone": "PST"
+                                    "TimeZone": "America/Los_Angeles"
                                 },
                                 "inputArtifacts": []
                             }
