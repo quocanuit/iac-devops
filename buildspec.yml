@@ -9,11 +9,11 @@ phases:
 
   pre_build:
     commands:
-      - aws s3 cp s3://mys3bucket548/vpc-cfn.yaml ./
-      - aws s3 cp s3://mys3bucket548/nat-cfn.yaml ./
-      - aws s3 cp s3://mys3bucket548/rt-cfn.yaml ./
-      - aws s3 cp s3://mys3bucket548/sg-cfn.yaml ./
-      - aws s3 cp s3://mys3bucket548/ec2-cfn.yaml ./
+      - aws s3 cp s3://mys3bucket/vpc-cfn.yaml ./
+      - aws s3 cp s3://mys3bucket/nat-cfn.yaml ./
+      - aws s3 cp s3://mys3bucket/rt-cfn.yaml ./
+      - aws s3 cp s3://mys3bucket/sg-cfn.yaml ./
+      - aws s3 cp s3://mys3bucket/ec2-cfn.yaml ./
       - cfn-lint *.yaml
 
   build:

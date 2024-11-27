@@ -31,3 +31,6 @@
 ## Architecture:
 
 ![architecture](./docs/assets/architecture.png)
+
+- Guideline: [guideline.md](./guideline.md)
+- Demo: https://www.youtube.com/watch?v=aozEAFxrnJs&t=168s

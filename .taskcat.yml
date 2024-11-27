@@ -4,7 +4,7 @@ project:
     - us-east-1
   parameters:
     KeyName: keypair1
-    TemplateBucketName: mys3bucket548
+    TemplateBucketName: mys3bucket
     TemplateVersion: ""
     AllowedSSHIP: 0.0.0.0/0
     InstanceType: t2.micro

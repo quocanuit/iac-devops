@@ -25,7 +25,7 @@ Parameters:
   TemplateBucketName:
     Description: Name of the S3 bucket containing nested stack templates
     Type: String
-    Default: mys3bucket548
+    Default: mys3bucket
 
   TemplateVersion:
     Description: Version or path prefix for the templates in S3
