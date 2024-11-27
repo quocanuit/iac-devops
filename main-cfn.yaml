@@ -10,12 +10,12 @@ Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
     Type: AWS::EC2::KeyPair::KeyName
-    Default: group13
+    Default: keypair1
 
   InstanceType:
     Description: EC2 instance type
     Type: String
-    Default: t2.large
+    Default: t2.medium
     AllowedValues:
       - t2.micro
       - t2.small
@@ -25,7 +25,7 @@ Parameters:
   TemplateBucketName:
     Description: Name of the S3 bucket containing nested stack templates
     Type: String
-    Default: nt548-labs
+    Default: mys3bucket
 
   TemplateVersion:
     Description: Version or path prefix for the templates in S3
